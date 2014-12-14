@@ -1,0 +1,14 @@
+html. body {
+	font-family: "Courier New";
+}
+.mood-good {
+	color: green;
+}
+
+.mood-bad {
+	color: tomato;
+}
+
+.mood-bold {
+	font-weight: bold;
+}
