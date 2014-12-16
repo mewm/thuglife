@@ -1,4 +1,4 @@
-var directions = {
+/*var directions = {
 	"n": new Vector(0, -1),
 	"ne": new Vector(1, -1),
 	"e": new Vector(1, 0),
@@ -133,3 +133,4 @@ function charFromElement(element, moodClass)
 		return element.originChar;
 	}
 }
+*/
