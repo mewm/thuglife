@@ -56,7 +56,7 @@ BaseCritter.prototype.walkTo = function(action)
 	var endPosition = new Vector2(action.newPosition.x, action.newPosition.y);
 
 	// Reached destination. Remove action.
-	if(Math.round(this.getPosition().distanceTo(endPosition)) <= 1) {
+	if(Math.floor(this.getPosition().distanceTo(endPosition)) <= 1) {
 		this.removeCompletedAction();
 		return true;
 	}
