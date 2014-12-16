@@ -44,42 +44,43 @@ World.prototype.addCritter = function(critter)
 World.prototype.turn = function()
 {
 	for(var ix in this.critters) {
-		var critter = this.critters[ix];
-		critter.act(ix);
-		//		// Handle box collisions.
-		//		if(critter.hasCollision) {
-		//			for(var i in this.critters) {
-		//				var critter = this.critters[i];
-		//				if(critter != critter && critter.hasCollision) {
-		//
-		//					// Just to make the statement below look a little less fucked.
-		//					var selfPosition = { left: critter.position.x, top: critter.position.y, right: critter.position.x+26, bottom: critter.position.y+37 };
-		//					var critterPosition = { left: critter.position.x, top: critter.position.y, right: critter.position.x+26, bottom: critter.position.y+37 };
-		//
-		//					// True if there is a collision.
-		//					/*console.log( "Collision: " +  
-		//						!( 
-		//							critterPosition.left > selfPosition.right || 
-		//							critterPosition.right < selfPosition.left || 
-		//							critterPosition.top > selfPosition.bottom || 
-		//							critterPosition.bottom < selfPosition.top 
-		//						)
-		//					)*/
-		//				} 
-		//			}
-		//		}
-		//
-		//		// Handle detection collisions.
-		//		if(critter.proximityDetector.enabled) {
-		//			for(var i in this.critters) {
-		//				var critter = this.critters[i];
-		//				if(critter != critter && !critter.focus && critter.proximityDetector.enabled) {
-		//					if(critter.position.distanceTo(critter.position) <= critter.proximityDetector.radius) {
-		//						critter.focus = critter;
-		//						console.log("Bunny[" + ix + "] is focused on: Bunny[" + i +"]" );
-		//					}
-		//				}
-		//			}
-		//		}
+		var thisCritter = this.critters[ix];
+
+		// Handle box collisions.
+		if(thisCritter.hasCollision) {
+			for(var i in this.critters) {
+				var critter = this.critters[i];
+				if(critter != thisCritter && critter.hasCollision) {
+
+					// Just to make the statement below look a little less fucked.
+					var selfPosition = { left: thisCritter.position.x, top: thisCritter.position.y, right: thisCritter.position.x+26, bottom: thisCritter.position.y+37 };
+					var critterPosition = { left: critter.position.x, top: critter.position.y, right: critter.position.x+26, bottom: critter.position.y+37 };
+
+					// True if there is a collision.
+					if( !(critterPosition.left > selfPosition.right || critterPosition.right < selfPosition.left || critterPosition.top > selfPosition.bottom || critterPosition.bottom < selfPosition.top) ) {
+
+					}
+				} 
+			}
+		}
+
+		// Handle detection collisions.
+		if(thisCritter.proximityDetector.enabled) {
+			for(var i in this.critters) {
+				var critter = this.critters[i];
+				if(critter != thisCritter) {
+					if(thisCritter.position.distanceTo(critter.position) <= thisCritter.proximityDetector.radius && !thisCritter.hasDetected(critter)) {
+						thisCritter.addElementInRange(critter);
+						console.log("Added element[" + i + "] to element[" + ix + "]");
+					} else if (thisCritter.position.distanceTo(critter.position) > thisCritter.proximityDetector.radius && thisCritter.hasDetected(critter)) {
+						thisCritter.removeElementInRange(critter);
+						console.log("Removed element[" + i + "] to element[" + ix + "]");
+					}
+				}
+			}
+		}
+
+		thisCritter.act(ix);
+
 	}
 }

@@ -2,11 +2,11 @@ Bunny.prototype = Object.create(BaseCritter.prototype);
 
 function Bunny(id, x, y, canvas) {
 	BaseCritter.apply(this, arguments);
-	this.speed = 10;
+	this.speed = 1;
 	this.queueAction(actionFactory.createWalk(new Vector2(100,100), new Vector2(0,0)));
 }
 
-Bunny.prototype.act = function()
+Bunny.prototype.act = function(colidedCritter)
 {
 	// Execute active actionQueue or random walk.
 	
@@ -15,10 +15,13 @@ Bunny.prototype.act = function()
 		if(action.type == 'walk') {
 			this.walkTo(action);
 		}
-
 	} else {
 		//Walk random
 		this.walkRandom();
+	}
+
+	if(colidedCritter) {
+		//console
 	}
 };
 

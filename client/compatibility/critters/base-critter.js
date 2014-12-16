@@ -3,6 +3,7 @@ function BaseCritter(id, startX, startY, element) {
 	this.speed = 1;
 	this.element = element;
 	this.element.position = new Vector2(startX, startY);
+	this.position = this.element.position;
 	this.actionQueue = [];
 
 	this.focus = null;
@@ -11,6 +12,7 @@ function BaseCritter(id, startX, startY, element) {
 		enabled: true,
 		radius: 100
 	};
+	this.elementsInRange = [];
 
 	this.element.anchor.x = 0.5;
 	this.element.anchor.y = 0.5;
@@ -37,10 +39,11 @@ BaseCritter.prototype.walkRandom = function()
 
 BaseCritter.prototype.setPosition = function(position) {
 	this.element.position = position;
+	this.position = position;
 }
 
 BaseCritter.prototype.getPosition = function() {
-	return this.element.position;
+	return this.position;
 }
 
 BaseCritter.prototype.queueAction = function(action) {
@@ -49,6 +52,21 @@ BaseCritter.prototype.queueAction = function(action) {
 
 BaseCritter.prototype.removeCompletedAction = function() {
 	this.actionQueue.splice(0, 1);
+}
+
+BaseCritter.prototype.hasDetected = function(element) {
+	if(this.elementsInRange.indexOf(element) == -1) {
+		return false;
+	}
+	return true;
+}
+
+BaseCritter.prototype.addElementInRange = function(element) {
+	this.elementsInRange.push(element);
+}
+
+BaseCritter.prototype.removeElementInRange = function(element) {
+	this.elementsInRange.splice(this.elementsInRange.indexOf(element), 1);
 }
 
 BaseCritter.prototype.walkTo = function(action)
