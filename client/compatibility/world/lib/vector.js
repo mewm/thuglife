@@ -1,3 +1,4 @@
+
 function Vector2(x,y) {
 	this.x = x;
 	this.y = y;
@@ -96,3 +97,4 @@ Vector2.prototype.equals = function(v) {
 Vector2.prototype.findAngleBetween = function(v) {
 	return Math.atan2(v.x-this.x, v.y-this.y);
 }
+
