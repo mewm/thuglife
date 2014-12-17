@@ -1,6 +1,6 @@
 Bunny.prototype = Object.create(BaseElement.prototype);
 
-function Bunny(id, x, y, canvas) {
+function Bunny(id, x, y, sprite) {
 	BaseElement.apply(this, arguments);
 	this.speed = 1;
 	this.codeName = 'bunny';

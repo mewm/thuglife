@@ -1,3 +1,15 @@
+// Test Shrooms.
+var shrooms = [];
+
+//DEBUG
+var _DEBUG = {
+	fps: {
+		show: true,
+		lastTick: null,
+		value: 0
+	}
+}
+
 function World()
 {
 	this.stage = new PIXI.Stage(0x66FF99);
@@ -7,6 +19,25 @@ function World()
 	document.body.appendChild(this.renderer.view);
 	this.seedElements();
 	this.animate();
+
+	//var container = new PIXI.DisplayObjectContainer();
+	//OR
+	var container = new PIXI.SpriteBatch();
+	this.stage.addChild(container);
+
+	var shroomTexture = PIXI.Texture.fromImage("shroom.png");
+	
+	for (var i = 0; i < 10000; i++) 
+	{
+		var shroom = new PIXI.Sprite(shroomTexture);
+		shroom.position.x = Math.random() * 500;
+		shroom.position.y = Math.random() * 500;
+		container.addChild(shroom);
+		shrooms.push(shroom);
+	}
+
+	this.fps = new PIXI.Text(_DEBUG.fps.value, {font: "bold 10px Arial", fill: "white", stroke: "black", strokeThickness: 2});
+	this.stage.addChild(this.fps);
 
 }
 
@@ -18,6 +49,21 @@ World.prototype.animate = function()
 		self.turn();
 		self.renderer.render(self.stage);
 
+		// Calculate FPS
+		if(_DEBUG.fps.show) {
+			if(!_DEBUG.fps.lastRender) 
+			{
+				_DEBUG.fps.lastRender = Date.now();
+				_DEBUG.fps.value = 0;	
+			}
+
+			var delta = (new Date().getTime() - _DEBUG.fps.lastRender)/1000;
+			_DEBUG.fps.lastRender = Date.now();
+			_DEBUG.fps.value = Math.round(1/delta);
+
+			self.fps.setText("fps: " + _DEBUG.fps.value);
+		}
+
 		requestAnimFrame(animate);
 	}
 	requestAnimFrame(animate);
@@ -25,15 +71,14 @@ World.prototype.animate = function()
 
 World.prototype.seedElements = function()
 {
-	var shrooms = 100;
+	var shrooms = 0;
 	for (var i = 0; i < shrooms; i++) {
 		// Create a new critter in the center of the map with some random offset.
 		var element = this.elementFactory.createShroom(Math.random() * 500, Math.random() * 500);
 		this.addElement(element);
 	}
 	
-	
-	var bunnies = 3;
+	var bunnies = 10;
 	for (var i = 0; i < bunnies; i++) {
 		// Create a new critter in the center of the map with some random offset.
 		var element = this.elementFactory.createBunny(Math.random() * 500, Math.random() * 500);
@@ -131,5 +176,11 @@ World.prototype.turn = function()
 
 		element.act(ix);
 
+	}
+
+	for(var i in shrooms) {
+		var shroom = shrooms[i];
+		shroom.position.x = Math.random() * 500;
+		shroom.position.y = Math.random() * 500;
 	}
 }
