@@ -1,14 +1,16 @@
 var elementFactory = {
+	textures: {
+		bunny: PIXI.Texture.fromImage("bunny.png"),
+		shroom: PIXI.Texture.fromImage("shroom.png")
+	},
 	createBunny: function(x, y)
 	{
-		var texture = PIXI.Texture.fromImage("bunny.png");
-		var element = new PIXI.Sprite(texture)
+		var element = new PIXI.Sprite(this.textures.bunny)
 		return new Bunny(1, x, y, element);
 	},
 	createShroom: function(x, y)
 	{
-		var texture = PIXI.Texture.fromImage("shroom.png");
-		var element = new PIXI.Sprite(texture)
+		var element = new PIXI.Sprite(this.textures.shroom);
 		return new Shroom(2, x, y, element);
 	}
 };

@@ -4,7 +4,6 @@ function Bunny(id, x, y, sprite) {
 	BaseElement.apply(this, arguments);
 	this.speed = 1;
 	this.codeName = 'bunny';
-	this.queueAction(actionFactory.createWalk(new Vector2(100,100), new Vector2(0,0)));
 }
 
 Bunny.prototype.act = function()
@@ -27,6 +26,8 @@ Bunny.prototype.act = function()
 		//Walk random
 		this.walkRandom();
 	}
+
+	this.walkRandom();
 
 };
 
