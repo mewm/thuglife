@@ -43,6 +43,8 @@ BaseElement.prototype.walkRandom = function()
 }
 
 BaseElement.prototype.setPosition = function(position) {
+	position.x = Math.round(position.x);
+	position.y = Math.round(position.y);
 	this.sprite.position = position;
 	this.position = position;
 }

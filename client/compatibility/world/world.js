@@ -1,6 +1,3 @@
-// Test Shrooms.
-var shrooms = [];
-
 //DEBUG
 var _DEBUG = {
 	fps: {
@@ -13,38 +10,13 @@ var _DEBUG = {
 function World()
 {
 	this.stage = new PIXI.Stage(0x66FF99);
-//	this.renderer = new PIXI.WebGLRenderer(500, 500);//autoDetectRenderer(400, 300);
-	this.renderer = new PIXI.CanvasRenderer(500, 500);//autoDetectRenderer(400, 300);
+	this.renderer = new PIXI.WebGLRenderer(500, 500);//autoDetectRenderer(400, 300);
 	this.elements = [];
 	this.elementFactory = elementFactory;
 	document.body.appendChild(this.renderer.view);
-//	this.seedElements();
+	this.seedElements();
 	this.animate();
 
-	//var container = new PIXI.DisplayObjectContainer();
-	//OR
-	var container = new PIXI.SpriteBatch();
-	this.stage.addChild(container);
-
-
-		var shroomTexture = PIXI.Texture.fromImage("shroom.png");
-	//	
-	//	for (var i = 0; i < 10000; i++) 
-	//	{
-	//		var shroom = new PIXI.Sprite(shroomTexture);
-	//		shroom.position.x = Math.random() * 500;
-	//		shroom.position.y = Math.random() * 500;
-	
-	for (var i = 0; i < 1; i++) 
-	{
-//		var shroom = this.elementFactory.createShroom(Math.random() * 500, Math.random() * 500);
-//		this.addElement(shroom, container);
-		var shroom = new PIXI.Sprite(shroomTexture);
-		shroom.position.x = Math.random() * 500;
-		shroom.position.y = Math.random() * 500;
-		container.addChild(shroom);
-		shrooms.push(shroom);
-	}
 
 	this.fps = new PIXI.Text(_DEBUG.fps.value, {font: "bold 10px Arial", fill: "white", stroke: "black", strokeThickness: 2});
 	this.stage.addChild(this.fps);
@@ -83,19 +55,17 @@ World.prototype.seedElements = function()
 {
 	var shroomBatch = new PIXI.SpriteBatch();
 	this.stage.addChild(shroomBatch);
-	var shroomsNo = 1;
+	var shroomsNo = 1000;
 	for (var i = 0; i < shroomsNo; i++) {
 		// Create a new critter in the center of the map with some random offset.
 		var element = this.elementFactory.createShroom(Math.random() * 500, Math.random() * 500);
 		this.addElement(element, shroomBatch);
-//		shroomBatch.addChild(element.sprite);
-//		shrooms.push(element);
 	}
 
 	var bunnyBatch = new PIXI.SpriteBatch();
 	this.stage.addChild(bunnyBatch);
 	
-	var bunnies = 1;
+	var bunnies = 1000;
 	for (var i = 0; i < bunnies; i++) {
 		// Create a new critter in the center of the map with some random offset.
 		var element = this.elementFactory.createBunny(Math.random() * 500, Math.random() * 500);
@@ -177,31 +147,24 @@ World.prototype.removeDeadElements = function()
 }
 World.prototype.turn = function()
 {
-//	for (var ix in this.elements) {
-//		if(this.elements.hasOwnProperty(ix)) {
-//			var element = this.elements[ix];
-//
-//			//		this.removeDeadElements();
-//			// Handle box collisions.
-//			if (element.hasCollision) {
-//				//			this.registerCollidesWithElement(element);
-//			}
-//
-//			// Handle detection collisions.
-//			if (element.proximityDetector.enabled) {
-//				//			this.registerElementsInRange(element);
-//			}
-//
-//			//		element.act();
-//
-//			element.position.x++;
-//			element.position.y++;
-//		}
-//	}
-		for(var i in shrooms) {
-			var shroom = shrooms[i];
-			shroom.position.x++;
-			shroom.position.y++;
+	for (var ix in this.elements) {
+		if(this.elements.hasOwnProperty(ix)) {
+			var element = this.elements[ix];
+
+			//		this.removeDeadElements();
+			// Handle box collisions.
+			if (element.hasCollision) {
+				//			this.registerCollidesWithElement(element);
+			}
+
+			// Handle detection collisions.
+			if (element.proximityDetector.enabled) {
+				//			this.registerElementsInRange(element);
+			}
+
+					element.act();
 		}
+	}
+
 	
 }
