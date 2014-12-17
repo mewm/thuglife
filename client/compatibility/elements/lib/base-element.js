@@ -7,9 +7,9 @@ function BaseElement(id, startX, startY, sprite) {
 	this.actionQueue = [];
 
 	this.focus = null;
-	this.hasCollision = false;
+	this.hasCollision = true;
 	this.proximityDetector = {
-		enabled: false,
+		enabled: true,
 		radius: 100
 	};
 

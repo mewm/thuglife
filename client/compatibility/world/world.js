@@ -55,7 +55,7 @@ World.prototype.seedElements = function()
 {
 	var shroomBatch = new PIXI.SpriteBatch();
 	this.stage.addChild(shroomBatch);
-	var shroomsNo = 1000;
+	var shroomsNo = 50;
 	for (var i = 0; i < shroomsNo; i++) {
 		// Create a new critter in the center of the map with some random offset.
 		var element = this.elementFactory.createShroom(Math.random() * 500, Math.random() * 500);
@@ -65,7 +65,7 @@ World.prototype.seedElements = function()
 	var bunnyBatch = new PIXI.SpriteBatch();
 	this.stage.addChild(bunnyBatch);
 	
-	var bunnies = 1000;
+	var bunnies = 1;
 	for (var i = 0; i < bunnies; i++) {
 		// Create a new critter in the center of the map with some random offset.
 		var element = this.elementFactory.createBunny(Math.random() * 500, Math.random() * 500);
@@ -82,18 +82,19 @@ World.prototype.addElement = function(element, container)
 
 World.prototype.removeElement = function(element)
 {
-	var search = this.stage.children.indexOf(element.sprite); 
+	var search = element.sprite.parent.children.indexOf(element.sprite); 
 	if(search !== -1) {
-		this.stage.removeChild(this.stage.children[search]);
+		element.sprite.parent.removeChild(element.sprite);
 	}
+
 };
 
 
-World.prototype.registerCollidesWithElement = function(element)
+World.prototype.registerElementsCollidingWith = function(element)
 {
 	for (var i in this.elements) {
 		var worldElement = this.elements[i];
-		if (worldElement != element && worldElement.hasCollision) {
+		if (worldElement != element) {
 
 		
 			// Just to make the statement below look a little less fucked.
@@ -138,9 +139,9 @@ World.prototype.registerElementsInRange = function(element)
 
 World.prototype.removeDeadElements = function()
 {
-	for (var i in this.elements) {
+	for(var i = this.elements.length; i--;) {
 		var element = this.elements[i];
-		if(!element.isAlive) {
+		if(!element.isAlive && element.sprite) {
 			this.removeElement(element);
 		}
 	}
@@ -151,18 +152,18 @@ World.prototype.turn = function()
 		if(this.elements.hasOwnProperty(ix)) {
 			var element = this.elements[ix];
 
-			//		this.removeDeadElements();
+			this.removeDeadElements();
 			// Handle box collisions.
 			if (element.hasCollision) {
-				//			this.registerCollidesWithElement(element);
+				this.registerElementsCollidingWith(element);
 			}
 
 			// Handle detection collisions.
 			if (element.proximityDetector.enabled) {
-				//			this.registerElementsInRange(element);
+				this.registerElementsInRange(element);
 			}
 
-					element.act();
+			element.act();
 		}
 	}
 
