@@ -2,8 +2,9 @@ Shroom.prototype = Object.create(InanimateElement.prototype);
 
 function Shroom(id, x, y, sprite) {
 	InanimateElement.apply(this, arguments);
-	this.codeName = 'shroom';
-	
+	this.type = 'shroom';
+	this.energyDrainPerTick = 0;
+	this.energyReplenishment = 20;
 }
 
 Shroom.constructor = Shroom;

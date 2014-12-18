@@ -1,13 +1,17 @@
-var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIXI, w) {
 
+var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIXI, w) {
+	
 	//DEBUG
 	var _DEBUG = {
 		fps: {
 			show: true,
 			lastTick: null,
 			value: 0
-		}
+		},
+		msg: ''
 	}
+	
+	World.debugger = null;
 
 	function World()
 	{
@@ -31,7 +35,8 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 			this.stage.addChild(this.fps);
 		}
 	}
-
+	
+	
 	World.prototype.animate = function()
 	{
 		var self = this;
@@ -52,6 +57,7 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 				_DEBUG.fps.value = Math.round(1 / delta);
 
 				self.fps.setText("fps: " + _DEBUG.fps.value);
+				World.debugger.set("fps: " + _DEBUG.fps.value);
 			}
 
 			requestAnimFrame(animate);
@@ -73,10 +79,10 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 		for (var i = 0; i < this.elements.length; i++) {
 			var worldElement = this.elements[i];
 
-			if (worldElement.codeName == "bunny") {
-//				if (worldElement.hasInRange(element)) {
-//					worldElement.removeElementInRange(element);
-//				}
+			if (worldElement.type == "bunny") {
+				if (worldElement.isAlreadyInRange(element)) {
+					worldElement.removeElementInRange(element);
+				}
 				if (worldElement.isAlreadyCollidingWith(element)) {
 					worldElement.removeCollidedElement(element);
 				}
@@ -98,27 +104,13 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 
 	};
 
-	
-
-	World.prototype.registerElementsInRange = function(element)
-	{
-		for (var i = 0; i < this.elements.length; i++) {
-			var worldElement = this.elements[i];
-			if (worldElement != element) {
-				if (element.position.distanceTo(worldElement.position) <= element.proximityDetector.radius && !element.hasInRange(worldElement)) {
-					element.addElementInRange(worldElement);
-				} else if (element.position.distanceTo(worldElement.position) > element.proximityDetector.radius && element.hasInRange(worldElement)) {
-					element.removeElementInRange(worldElement);
-				}
-			}
-		}
-	}
 
 	World.prototype.removeDeadElements = function()
 	{
 		for (var i = 0; i < this.elements.length; i++) {
 			var element = this.elements[i];
 			if (!element.isAlive && element.sprite) {
+				console.log('removed element');
 				this.removeElement(element);
 			}
 		}
@@ -129,9 +121,10 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 		this.removeDeadElements();
 		for (var i = 0; i < this.elements.length; i++) {
 			var element = this.elements[i];
-//			element.dete();
+			element.detectElementsInRange(this.elements);
 			element.detectCollisions(this.elements);
 			element.act();
+			element.drainEnergy();
 		}
 	}	
 	

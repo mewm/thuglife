@@ -2,9 +2,6 @@ function BaseElement(id, startX, startY, sprite)
 {
 	this.id = id || null;
 
-	this.target = null;
-	this.targetBy = null;
-
 	//Sprite
 	this.sprite = sprite;
 	this.sprite.position = new Vector2(startX, startY);
@@ -16,6 +13,7 @@ function BaseElement(id, startX, startY, sprite)
 	this.speed = 1;
 	this.energy = 100;
 	this.isAlive = true;
+	this.energyDrainPerTick = 0.1;
 
 	//Collections
 	this.elementsInRange = [];
@@ -26,28 +24,35 @@ function BaseElement(id, startX, startY, sprite)
 	this.canBeCollidedWith = false;
 	this.proximityDetector = {
 		enabled: true,
-		radius: 300
+		radius: 200
 	};
 
 	this.actionQueue = [];
 }
 
+BaseElement.prototype.drainEnergy = function()
+{
+	this.energy -= this.energyDrainPerTick;
+	if (this.energy <= 0) {
+		this.kill();
+	}
+}
 
-BaseElement.prototype.die = function()
+BaseElement.prototype.kill = function()
 {
 	this.isAlive = false;
 };
-
-BaseElement.prototype.kill = function(targetElement)
-{
-	targetElement.die();
-}
-
 
 BaseElement.prototype.queueAction = function(action)
 {
 	this.actionQueue.push(action);
 }
+
+BaseElement.prototype.queueActionFirst = function(action)
+{
+	this.actionQueue.unshift(action);
+}
+
 
 BaseElement.prototype.overrideCurrentAction = function(action)
 {
@@ -56,7 +61,7 @@ BaseElement.prototype.overrideCurrentAction = function(action)
 
 BaseElement.prototype.removeCompletedAction = function()
 {
-	this.actionQueue.splice(this.actionQueue.length - 1, 1);
+	this.actionQueue.splice(0, 1);
 }
 
 BaseElement.prototype.getPosition = function()
@@ -72,8 +77,6 @@ BaseElement.prototype.setPosition = function(position)
 	this.position = position;
 }
 
-
-
 BaseElement.prototype.detectCollisions = function(worldElements)
 {
 	for (var i = 0; i < worldElements.length; i++) {
@@ -81,10 +84,8 @@ BaseElement.prototype.detectCollisions = function(worldElements)
 		if (worldElement != this) {
 
 			// True if there is a collision.
-			if (this.isCollidingWith(worldElement)) {
-				if (!this.isAlreadyCollidingWith(worldElement)) {
-					this.addCollidedElement(worldElement);
-				}
+			if (this.isCollidingWith(worldElement) && !this.isAlreadyCollidingWith(worldElement)) {
+				this.addCollidedElement(worldElement);
 			} else {
 				if (this.isAlreadyCollidingWith(worldElement)) {
 					this.removeCollidedElement(worldElement);
@@ -116,7 +117,6 @@ BaseElement.prototype.isCollidingWith = function(element)
 		right: element.position.x + element.sprite.width,
 		bottom: element.position.y + element.sprite.height
 	};
-	
 
 	return !(elementPos.left > selfPos.right || elementPos.right < selfPos.left || elementPos.top > selfPos.bottom || elementPos.bottom < selfPos.top);
 }
@@ -131,53 +131,68 @@ BaseElement.prototype.removeCollidedElement = function(element)
 	this.collidedElements.splice(this.elementsInRange.indexOf(element), 1);
 }
 
+BaseElement.prototype.detectElementsInRange = function(worldElements)
+{
+	for (var i = 0; i < worldElements.length; i++) {
+		var worldElement = worldElements[i];
+		if (worldElement != this) {
+			if (this.isInRange(worldElement) && !this.isAlreadyInRange(worldElement)) {
+				this.addElementInRange(worldElement);
+			} else {
+				if (this.isAlreadyInRange(worldElement)) {
+					this.removeElementInRange(worldElement);
+				}
+			}
+		}
+	}
+}
 
+BaseElement.prototype.isInRange = function(worldElement)
+{
+	return this.position.distanceTo(worldElement.position) <= this.proximityDetector.radius;
+}
+//
+BaseElement.prototype.isAlreadyInRange = function(element)
+{
+	if (this.elementsInRange.indexOf(element) == -1) {
+		return false;
+	}
+	return true;
+}
 
-//
-//BaseElement.prototype.detectElementsInRage = function()
-//{
-//
-//	//Loop through each other element in the world and detect collisions
-//
-//};
-//
-//BaseElement.prototype.isAlreadyInRange = function(element)
-//{
-//	if (this.elementsInRange.indexOf(element) == -1) {
-//		return false;
-//	}
-//	return true;
-//}
-//
-//BaseElement.prototype.addElementInRange = function(element)
-//{
-//	this.elementsInRange.push(element);
-//}
-//
-//BaseElement.prototype.removeElementInRange = function(element)
-//{
-//	this.elementsInRange.splice(this.elementsInRange.indexOf(element), 1);
-//}
-//
-//BaseElement.prototype.getClosestElementOfTypeInRange = function(type)
-//{
-//	var closestElement;
-//	var closestElementDistance = 0;
-//
-//	// Loop through all elements in range.
-//	for (var i = 0; i < this.elementsInRange.length; i++) {
-//		var worldElement = this.elementsInRange[i];
-//		// If the element is a shroom.
-//		if (worldElement.codeName == type) {
-//			// Distance to target element.
-//			var distance = this.position.distanceTo(worldElement.position);
-//			// If we dont have a closest element or the new measured distance is lower than the last then set this element as new closestElement.
-//			if (!closestElement || distance < closestElementDistance) {
-//				closestElement = worldElement;
-//				closestElementDistance = distance;
-//			}
-//		}
-//	}
-//
-//	return closestElement;
-//}
+BaseElement.prototype.addElementInRange = function(element)
+{
+	this.elementsInRange.push(element);
+}
+
+BaseElement.prototype.removeElementInRange = function(element)
+{
+	this.elementsInRange.splice(this.elementsInRange.indexOf(element), 1);
+}
+
+BaseElement.prototype.getClosestElementOfTypeInRange = function(type)
+{
+	var closestElement = null;
+	var closestElementDistance = null;
+
+	// Loop through all elements in range.
+	for (var i = 0; i < this.elementsInRange.length; i++) {
+		var worldElement = this.elementsInRange[i];
+		// If the element is a shroom.
+		if (worldElement.type == type) {
+			// Distance to target element.
+			var distance = this.position.distanceTo(worldElement.position);
+
+			// If we dont have a closest element or the new measured distance is lower than the last then set this element as new closestElement.
+			if (distance < closestElementDistance || closestElementDistance === null) {
+				closestElement = worldElement;
+				closestElementDistance = distance;
+			}
+		}
+	}
+	
+	if(!closestElement) {
+		return null;
+	}
+	return closestElement;
+}
