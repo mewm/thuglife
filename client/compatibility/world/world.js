@@ -57,7 +57,7 @@ World.prototype.seedElements = function()
 {
 	var shroomBatch = new PIXI.SpriteBatch();
 	this.stage.addChild(shroomBatch);
-	var shroomsNo = 250;
+	var shroomsNo = 25;
 	for (var i = 0; i < shroomsNo; i++) {
 		// Create a new critter in the center of the map with some random offset.
 		var element = this.elementFactory.createShroom(Math.random() * 500, Math.random() * 500);
@@ -67,7 +67,7 @@ World.prototype.seedElements = function()
 	var bunnyBatch = new PIXI.SpriteBatch();
 	this.stage.addChild(bunnyBatch);
 	
-	var bunnies = 100;
+	var bunnies = 3;
 	for (var i = 0; i < bunnies; i++) {
 		// Create a new critter in the center of the map with some random offset.
 		var element = this.elementFactory.createBunny(Math.random() * 500, Math.random() * 500);
