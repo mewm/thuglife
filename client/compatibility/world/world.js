@@ -1,7 +1,7 @@
 //DEBUG
 var _DEBUG = {
 	fps: {
-		show: false,
+		show: true,
 		lastTick: null,
 		value: 0
 	}
@@ -57,7 +57,7 @@ World.prototype.seedElements = function()
 {
 	var shroomBatch = new PIXI.SpriteBatch();
 	this.stage.addChild(shroomBatch);
-	var shroomsNo = 25;
+	var shroomsNo = 100;
 	for (var i = 0; i < shroomsNo; i++) {
 		// Create a new critter in the center of the map with some random offset.
 		var element = this.elementFactory.createShroom(Math.random() * 500, Math.random() * 500);
@@ -67,7 +67,7 @@ World.prototype.seedElements = function()
 	var bunnyBatch = new PIXI.SpriteBatch();
 	this.stage.addChild(bunnyBatch);
 	
-	var bunnies = 3;
+	var bunnies = 25;
 	for (var i = 0; i < bunnies; i++) {
 		// Create a new critter in the center of the map with some random offset.
 		var element = this.elementFactory.createBunny(Math.random() * 500, Math.random() * 500);
@@ -190,14 +190,6 @@ World.prototype.turn = function()
 
 			// Fire action
 			element.act();
-
-			// Move this later.
-			if(element.codeName == "bunny") {
-				element.energy -= 0.075
-				if(element.energy <= 0) {
-					element.kill();
-				}
-			}
 
 		}
 	}

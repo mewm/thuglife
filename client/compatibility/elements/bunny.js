@@ -11,17 +11,19 @@ Bunny.prototype.act = function()
 	// Fire current action in actionQueue.
 	if(this.actionQueue.length > 0) {
 		var action = this.actionQueue[0];
+
 		// If we are hungry.
 		if(this.energy <= 90 && !this.target) {
 			if(this.elementsInRange.length > 0) {
+				// Look for the closest element.
 				var closestElement = this.getClosestElementOfTypeInRange("shroom");
 				this.target = closestElement;
-				if(this.target == undefined) {	// THis shit needs to be fixed.
+				if(this.target == undefined) {	// This shit needs to be fixed.
 					if(action.type == 'walk') {
-						this.walkTo(action);
+						this.dropCurrentActionFor(actionFactory.createWalk.call(this, new Vector2(Math.random() * 500, Math.random() * 500)));
 					}
 				} else {
-					this.actionQueue[0] = actionFactory.createWalk.call(this, closestElement.position);
+					this.dropCurrentActionFor(actionFactory.createWalk.call(this, closestElement.position));
 					this.speed = 2;
 				}
 			} else {
@@ -37,6 +39,7 @@ Bunny.prototype.act = function()
 
 	} else {
 		this.walkRandom();
+		this.speed = 1;
 	}
 
 	// If we have something in focus and we're colliding with it, kill it and reset energy.
@@ -46,10 +49,13 @@ Bunny.prototype.act = function()
 			this.target = null;
 			this.energy = 100;
 			this.speed = 1;
-		}		
+		}
 	}
 
-
-	console.log(this.energy);
+	// Take some energy and kill that fucker if it gets to 0.
+	this.energy -= 0.075
+	if(this.energy <= 0) {
+		this.kill();
+	}
 
 };
