@@ -22,6 +22,7 @@ Bunny.prototype.act = function()
 					}
 				} else {
 					this.actionQueue[0] = actionFactory.createWalk.call(this, closestElement.position);
+					this.speed = 2;
 				}
 			} else {
 				if(action.type == 'walk') {
@@ -44,7 +45,11 @@ Bunny.prototype.act = function()
 			this.target.kill();
 			this.target = null;
 			this.energy = 100;
+			this.speed = 1;
 		}		
 	}
+
+
+	console.log(this.energy);
 
 };

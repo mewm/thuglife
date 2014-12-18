@@ -90,9 +90,7 @@ World.prototype.removeElement = function(element)
 		var worldElement = this.elements[i];
 		if(worldElement.codeName == "bunny") {
 			if(worldElement.hasDetected(element)) {
-				console.log(worldElement.elementsInRange.length);
 				worldElement.removeElementInRange(element);
-				console.log(worldElement.elementsInRange.length);
 			}
 			if(worldElement.isCollidingWith(element)) {
 				worldElement.removeCollidedElement(element);	
@@ -127,14 +125,14 @@ World.prototype.registerElementsCollidingWith = function(element)
 			var selfPosition = {
 				left: element.position.x,
 				top: element.position.y,
-				right: element.position.x + 26,
-				bottom: element.position.y + 37
+				right: element.position.x + element.sprite.width,
+				bottom: element.position.y + element.sprite.height
 			};
 			var worldElementPosition = {
 				left: worldElement.position.x,
 				top: worldElement.position.y,
-				right: worldElement.position.x + 26,
-				bottom: worldElement.position.y + 37
+				right: worldElement.position.x + element.sprite.width,
+				bottom: worldElement.position.y + element.sprite.height
 			};
 
 			// True if there is a collision.
