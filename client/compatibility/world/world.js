@@ -18,8 +18,10 @@ function World()
 	this.animate();
 
 
-	this.fps = new PIXI.Text(_DEBUG.fps.value, {font: "bold 10px Arial", fill: "white", stroke: "black", strokeThickness: 2});
-	this.stage.addChild(this.fps);
+	if(_DEBUG.fps.show) {
+		this.fps = new PIXI.Text(_DEBUG.fps.value, {font: "bold 10px Arial", fill: "white", stroke: "black", strokeThickness: 2});
+		this.stage.addChild(this.fps);
+	}
 
 }
 
@@ -55,7 +57,7 @@ World.prototype.seedElements = function()
 {
 	var shroomBatch = new PIXI.SpriteBatch();
 	this.stage.addChild(shroomBatch);
-	var shroomsNo = 50;
+	var shroomsNo = 250;
 	for (var i = 0; i < shroomsNo; i++) {
 		// Create a new critter in the center of the map with some random offset.
 		var element = this.elementFactory.createShroom(Math.random() * 500, Math.random() * 500);
@@ -65,7 +67,7 @@ World.prototype.seedElements = function()
 	var bunnyBatch = new PIXI.SpriteBatch();
 	this.stage.addChild(bunnyBatch);
 	
-	var bunnies = 1;
+	var bunnies = 100;
 	for (var i = 0; i < bunnies; i++) {
 		// Create a new critter in the center of the map with some random offset.
 		var element = this.elementFactory.createBunny(Math.random() * 500, Math.random() * 500);
@@ -82,9 +84,33 @@ World.prototype.addElement = function(element, container)
 
 World.prototype.removeElement = function(element)
 {
+
+	// Remove element from all players.
+	for(var i = 0; i < this.elements.length; i++) {
+		var worldElement = this.elements[i];
+		if(worldElement.codeName == "bunny") {
+			if(worldElement.hasDetected(element)) {
+				console.log(worldElement.elementsInRange.length);
+				worldElement.removeElementInRange(element);
+				console.log(worldElement.elementsInRange.length);
+			}
+			if(worldElement.isCollidingWith(element)) {
+				worldElement.removeCollidedElement(element);	
+			}
+		}
+	}
+
+	// Remove elements sprite from spriteBatch.
 	var search = element.sprite.parent.children.indexOf(element.sprite); 
 	if(search !== -1) {
 		element.sprite.parent.removeChild(element.sprite);
+		element.sprite = null;
+	}
+
+	// Remove element from world.
+	var search = this.elements.indexOf(element); 
+	if(search !== -1) {
+		this.elements.splice(search, 1);
 	}
 
 };
@@ -92,7 +118,7 @@ World.prototype.removeElement = function(element)
 
 World.prototype.registerElementsCollidingWith = function(element)
 {
-	for (var i in this.elements) {
+	for (var i = 0; i < this.elements.length; i++) {
 		var worldElement = this.elements[i];
 		if (worldElement != element) {
 
@@ -125,12 +151,12 @@ World.prototype.registerElementsCollidingWith = function(element)
 
 World.prototype.registerElementsInRange = function(element)
 {
-	for (var i in this.elements) {
+	for (var i = 0; i < this.elements.length; i++) {
 		var worldElement = this.elements[i];
 		if (worldElement != element) {
-			if (element.position.distanceTo(worldElement.position) <= element.proximityDetector.radius && !element.hasDetected(worldElement)) {
+			if (element.position.distanceTo(worldElement.position) <= element.proximityDetector.radius && !element.hasDetected(worldElement) && element.elementsInRange.length < element.memoryLimit) {
 				element.addElementInRange(worldElement);
-			} else if (element.position.distanceTo(worldElement.position) > element.proximityDetector.radius && element.hasDetected(worldElement)) {
+			} else if (element.position.distanceTo(worldElement.position) > element.proximityDetector.radius && element.hasDetected(worldElement)) { 
 				element.removeElementInRange(worldElement);
 			}
 		}
@@ -139,7 +165,7 @@ World.prototype.registerElementsInRange = function(element)
 
 World.prototype.removeDeadElements = function()
 {
-	for(var i = this.elements.length; i--;) {
+	for(var i = 0; i < this.elements.length; i++) {
 		var element = this.elements[i];
 		if(!element.isAlive && element.sprite) {
 			this.removeElement(element);
@@ -148,11 +174,12 @@ World.prototype.removeDeadElements = function()
 }
 World.prototype.turn = function()
 {
-	for (var ix in this.elements) {
-		if(this.elements.hasOwnProperty(ix)) {
-			var element = this.elements[ix];
+	for (var i in this.elements) {
+		if(this.elements.hasOwnProperty(i)) {
+			var element = this.elements[i];
 
 			this.removeDeadElements();
+
 			// Handle box collisions.
 			if (element.hasCollision) {
 				this.registerElementsCollidingWith(element);
@@ -163,7 +190,17 @@ World.prototype.turn = function()
 				this.registerElementsInRange(element);
 			}
 
+			// Fire action
 			element.act();
+
+			// Move this later.
+			if(element.codeName == "bunny") {
+				element.energy -= 0.075
+				if(element.energy <= 0) {
+					element.kill();
+				}
+			}
+
 		}
 	}
 

@@ -1,6 +1,6 @@
 var actionFactory = {
-	createWalk: function(newVector, originalVector)
+	createWalk: function(newVector)
 	{
-		return new Move(newVector, originalVector);
+		return new Move(newVector, this.position);
 	}
 };

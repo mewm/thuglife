@@ -6,7 +6,8 @@ function BaseElement(id, startX, startY, sprite) {
 	this.position = this.sprite.position;
 	this.actionQueue = [];
 
-	this.focus = null;
+	this.target = null;
+	this.targetBy = null;
 	this.hasCollision = true;
 	this.proximityDetector = {
 		enabled: true,
@@ -16,7 +17,9 @@ function BaseElement(id, startX, startY, sprite) {
 	this.sprite.anchor.x = 0.5;
 	this.sprite.anchor.y = 0.5;
 	
-	
+	this.energy = 100;
+
+	this.memoryLimit = 25;
 	this.elementsInRange = [];
 	this.collidedElements= [];
 	
@@ -58,7 +61,7 @@ BaseElement.prototype.queueAction = function(action) {
 }
 
 BaseElement.prototype.removeCompletedAction = function() {
-	this.actionQueue.splice(0, 1);
+	this.actionQueue.splice(this.actionQueue.length-1, 1);
 }
 
 BaseElement.prototype.hasDetected = function(element) {
@@ -91,10 +94,31 @@ BaseElement.prototype.removeElementInRange = function(element) {
 	this.elementsInRange.splice(this.elementsInRange.indexOf(element), 1);
 }
 
+BaseElement.prototype.getClosestElementOfTypeInRange = function(type) {
+	var closestElement;
+	var closestElementDistance;
+
+	// Loop through all elements in range.
+	for(var i = 0; i < this.elementsInRange.length; i++) {
+		var worldElement = this.elementsInRange[i];
+		// If the element is a shroom.
+		if(worldElement.codeName == type && worldElement.position != undefined) {
+			// Distance to target element.
+			var distance = this.position.distanceTo(worldElement);
+			// If we dont have a closest element or the new measured distance is lower than the last then set this element as new closestElement.
+			if(!closestElement || distance < closestElementDistance) {
+				closestElement = worldElement;
+				closestElementDistance = distance;
+			}
+		}
+	}
+
+	return closestElement;
+}
+
 BaseElement.prototype.kill = function() {
 	this.isAlive = false;
 };
-
 
 BaseElement.prototype.walkTo = function(action)
 {
