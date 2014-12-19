@@ -120,8 +120,14 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 		this.removeDeadElements();
 		for (var i = 0; i < this.elements.length; i++) {
 			var element = this.elements[i];
-			element.detectElementsInRange(this.elements);
-			element.detectCollisions(this.elements);
+
+			if(element.proximityDetector.enabled) {
+				element.detectElementsInRange(this.elements);
+			}
+			if(element.canCollideWithOthers) {
+				element.detectCollisions(this.elements);
+			}
+			
 			element.act();
 			element.drainEnergy();
 		}
