@@ -7,8 +7,6 @@ var elementFactory = {
 	{
 		var element = new PIXI.Sprite(this.textures.bunny);
 		var bunny = new Bunny(1, x, y, element);
-		var rad = new PIXI.Circle(x, y, bunny.proximityDetector.radius);
-//		bunny.addChild(rad);
 		return bunny;
 	},
 	createShroom: function(x, y)

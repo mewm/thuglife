@@ -74,6 +74,9 @@ BaseElement.prototype.setPosition = function(position)
 	position.x = Math.round(position.x);
 	position.y = Math.round(position.y);
 	this.sprite.position = position;
+	if(this.graphics) {
+		this.graphics.position = position;
+	}
 	this.position = position;
 }
 
