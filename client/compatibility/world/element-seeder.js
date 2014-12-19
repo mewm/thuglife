@@ -5,7 +5,7 @@ var elementSeeder = (function()
 		{
 			var shroomBatch = new PIXI.SpriteBatch();
 			this.stage.addChild(shroomBatch);
-			var shroomsNo = 15;
+			var shroomsNo = 100;
 			for (var i = 0; i < shroomsNo; i++) {
 				// Create a new critter in the center of the map with some random offset.
 				var element = elementFactory.createShroom(Math.random() * 500, Math.random() * 500);
@@ -18,15 +18,22 @@ var elementSeeder = (function()
 
 
 
-			var bunnies = 1;
+			var bunnies = 5;
 			for (var i = 0; i < bunnies; i++) {
 				// Create a new critter in the center of the map with some random offset.
 				var element = elementFactory.createBunny(Math.random() * 500, Math.random() * 500);
 
 				var graphics = new PIXI.Graphics();
-				graphics.alpha = 0.05;
-				graphics.beginFill(0x000000);
+
+				// Proximity Radius.
+				graphics.beginFill(0x000000, 0.25);
 				graphics.drawCircle(0,0,200);
+				graphics.endFill();
+
+				// Collision Box.
+				graphics.beginFill(0xFF0000, 0.5);
+				// Need AssetLoader to get the width and height of the spirte here for some reason. element.sprite.width/height will return 1 here.
+				graphics.drawRect(-(26/2), -(47/2), 26, 47);
 				graphics.endFill();
 				bunnyBatch.addChild(graphics);
 

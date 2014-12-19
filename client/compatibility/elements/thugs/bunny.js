@@ -22,17 +22,19 @@ Bunny.prototype.performActions = function()
 }
 
 Bunny.prototype.act = function()
-{
-	console.log(this.elementsInRange.length);
+{	
+
 	// Fire current action in actionQueue.
 	if(this.performActions()){
 		return true;
 	}
 	
 	// Take some energy and die that fucker if it gets to 0.
-//	if(this.energy < 50) {
+	if(this.energy < 50) {
 		this.goLookForFood();
-//	}
+	} else {
+		this.walkRandom();
+	}
 	
 }
 

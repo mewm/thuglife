@@ -110,7 +110,6 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 		for (var i = 0; i < this.elements.length; i++) {
 			var element = this.elements[i];
 			if (!element.isAlive && element.sprite) {
-				console.log('removed element');
 				this.removeElement(element);
 			}
 		}

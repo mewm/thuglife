@@ -13,7 +13,7 @@ function BaseElement(id, startX, startY, sprite)
 	this.speed = 1;
 	this.energy = 100;
 	this.isAlive = true;
-	this.energyDrainPerTick = 0.1;
+	this.energyDrainPerTick = 0.05;
 
 	//Collections
 	this.elementsInRange = [];
@@ -89,10 +89,8 @@ BaseElement.prototype.detectCollisions = function(worldElements)
 			// True if there is a collision.
 			if (this.isCollidingWith(worldElement) && !this.isAlreadyCollidingWith(worldElement)) {
 				this.addCollidedElement(worldElement);
-			} else {
-				if (this.isAlreadyCollidingWith(worldElement)) {
-					this.removeCollidedElement(worldElement);
-				}
+			} else if (!this.isCollidingWith(worldElement) && this.isAlreadyCollidingWith(worldElement)) {
+				this.removeCollidedElement(worldElement);
 			}
 		}
 	}
@@ -103,22 +101,25 @@ BaseElement.prototype.isAlreadyCollidingWith = function(element)
 	if (this.collidedElements.indexOf(element) != -1) {
 		return true;
 	}
+
+	return false;
 }
 
 BaseElement.prototype.isCollidingWith = function(element)
 {
+
 	// Just to make the statement below look a little less fucked.
 	var selfPos = {
-		left: this.position.x,
-		top: this.position.y,
-		right: this.position.x + this.sprite.width,
-		bottom: this.position.y + this.sprite.height
+		left: this.position.x - (this.sprite.width/2),
+		top: this.position.y - (this.sprite.height/2),
+		right: this.position.x + (this.sprite.width/2),
+		bottom: this.position.y + (this.sprite.height/2)
 	};
 	var elementPos = {
-		left: element.position.x,
-		top: element.position.y,
-		right: element.position.x + element.sprite.width,
-		bottom: element.position.y + element.sprite.height
+		left: element.position.x - (element.sprite.width/2),
+		top: element.position.y - (element.sprite.height/2),
+		right: element.position.x + (element.sprite.width/2),
+		bottom: element.position.y + (element.sprite.height/2)
 	};
 
 	return !(elementPos.left > selfPos.right || elementPos.right < selfPos.left || elementPos.top > selfPos.bottom || elementPos.bottom < selfPos.top);
@@ -131,7 +132,7 @@ BaseElement.prototype.addCollidedElement = function(element)
 
 BaseElement.prototype.removeCollidedElement = function(element)
 {
-	this.collidedElements.splice(this.elementsInRange.indexOf(element), 1);
+	this.collidedElements.splice(this.collidedElements.indexOf(element), 1);
 }
 
 BaseElement.prototype.detectElementsInRange = function(worldElements)
@@ -141,7 +142,7 @@ BaseElement.prototype.detectElementsInRange = function(worldElements)
 		if (worldElement != this) {
 			if (this.isInRange(worldElement) && !this.isAlreadyInRange(worldElement)) {
 				this.addElementInRange(worldElement);
-			} else {
+			} else if(!this.isInRange(worldElement) && this.isAlreadyInRange(worldElement)) {
 				if (this.isAlreadyInRange(worldElement)) {
 					this.removeElementInRange(worldElement);
 				}
@@ -150,17 +151,18 @@ BaseElement.prototype.detectElementsInRange = function(worldElements)
 	}
 }
 
-BaseElement.prototype.isInRange = function(worldElement)
-{
-	return this.position.distanceTo(worldElement.position) <= this.proximityDetector.radius;
-}
-//
 BaseElement.prototype.isAlreadyInRange = function(element)
 {
 	if (this.elementsInRange.indexOf(element) == -1) {
 		return false;
 	}
 	return true;
+}
+
+
+BaseElement.prototype.isInRange = function(worldElement)
+{
+	return this.position.distanceTo(worldElement.position) <= this.proximityDetector.radius;
 }
 
 BaseElement.prototype.addElementInRange = function(element)

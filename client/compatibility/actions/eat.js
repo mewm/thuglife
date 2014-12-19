@@ -13,7 +13,7 @@ Eat.prototype.perform = function()
 		this.edibleElement.kill();
 	}
 	
-	this.element.removeCompletedAction();		
+	this.element.removeCompletedAction();	
+	this.element.walkRandom(true);	
 	
 }
-

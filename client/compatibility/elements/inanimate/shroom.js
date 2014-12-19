@@ -4,7 +4,7 @@ function Shroom(id, x, y, sprite) {
 	InanimateElement.apply(this, arguments);
 	this.type = 'shroom';
 	this.energyDrainPerTick = 0;
-	this.energyReplenishment = 20;
+	this.energyReplenishment = 50;
 }
 
 Shroom.constructor = Shroom;
