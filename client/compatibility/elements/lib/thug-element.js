@@ -18,5 +18,3 @@ ThugElement.prototype.walkTo = function(endPosition)
 {
 	
 }
-
-

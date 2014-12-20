@@ -5,7 +5,7 @@ var elementSeeder = (function()
 		{
 			var shroomBatch = new PIXI.SpriteBatch();
 			this.stage.addChild(shroomBatch);
-			var shroomsNo = 250;
+			var shroomsNo = 10;
 			for (var i = 0; i < shroomsNo; i++) {
 				// Create a new critter in the center of the map with some random offset.
 				var element = elementFactory.createShroom(Math.random() * 500, Math.random() * 500);
@@ -16,9 +16,7 @@ var elementSeeder = (function()
 			var bunnyBatch = new PIXI.DisplayObjectContainer();
 			this.stage.addChild(bunnyBatch);
 
-
-
-			var bunnies = 5;
+			var bunnies = 1;
 			for (var i = 0; i < bunnies; i++) {
 				// Create a new critter in the center of the map with some random offset.
 				var element = elementFactory.createBunny(Math.random() * 500, Math.random() * 500);

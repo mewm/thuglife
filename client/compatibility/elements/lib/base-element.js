@@ -11,6 +11,7 @@ function BaseElement(id, startX, startY, sprite)
 
 	//Element base stats/state
 	this.speed = 1;
+	this.maxEnergy = 100;
 	this.energy = 100;
 	this.isAlive = true;
 	this.energyDrainPerTick = 0.05;
@@ -32,8 +33,8 @@ function BaseElement(id, startX, startY, sprite)
 
 BaseElement.prototype.drainEnergy = function()
 {
-	this.energy -= this.energyDrainPerTick;
-	if (this.energy <= 0) {
+	this.removeEnergy(this.energyDrainPerTick);
+	if (this.getEnergy() <= 0) {
 		this.kill();
 	}
 }
@@ -200,4 +201,32 @@ BaseElement.prototype.getClosestElementOfTypeInRange = function(type)
 		return null;
 	}
 	return closestElement;
+}
+
+BaseElement.prototype.addEnergy = function(energy) {
+	if(this.energy + energy <= this.maxEnergy) {
+		this.energy += energy;
+	} else {
+		this.energy = this.maxEnergy;
+	}
+}
+
+BaseElement.prototype.removeEnergy = function(energy) {
+	if(this.energy - energy <= 0) {
+		this.kill();
+	} else {
+		this.energy -= energy;
+	}
+}
+
+BaseElement.prototype.setEnergy = function(energy) {
+	if(energy > this.maxEnergy) {
+		return false;
+	} else {
+		this.energy = energy;
+	}
+}
+
+BaseElement.prototype.getEnergy = function() {
+	return this.energy;
 }

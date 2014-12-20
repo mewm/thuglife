@@ -9,7 +9,7 @@ function Eat(edibleElement, element)
 Eat.prototype.perform = function()
 {
 	if(this.element.isAlreadyCollidingWith(this.edibleElement)) {
-		this.element.energy += this.edibleElement.energyReplenishment;
+		this.element.addEnergy(this.edibleElement.energyReplenishment);
 		this.edibleElement.kill();
 	}
 	
