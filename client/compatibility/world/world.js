@@ -1,42 +1,39 @@
+var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIXI, w)
+{
+	World.fps = {
+		show: true,
+		lastTick: null,
+		value: 0,
+		sprite: {}
+	},
+	World.width = 800;
+	World.height = 600;
 
-var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIXI, w) {
-	
-	//DEBUG
-	var _DEBUG = {
-		fps: {
-			show: true,
-			lastTick: null,
-			value: 0
-		},
-		msg: ''
-	}
-	
-	World.debugger = null;
+	World.animateCallback = function()
+	{
+	};
 
 	function World()
 	{
 		this.stage = new PIXI.Stage(0x66FF99);
-		this.renderer = new PIXI.WebGLRenderer(500, 500);//autoDetectRenderer(400, 300);
-//			this.renderer = new PIXI.WebGLRenderer($(w).width()- 10, $(w).height() - 20);//autoDetectRenderer(400, 300);
+		this.renderer = new PIXI.WebGLRenderer(World.width, World.height);//autoDetectRenderer(400, 300);
+		document.getElementById('canvas').appendChild(this.renderer.view);
 
-		document.body.appendChild(this.renderer.view);
-		
 		this.elements = [];
 		elementSeeder.seedAll.call(this);
-
 		this.animate();
-		if (_DEBUG.fps.show) {
-			this.fps = new PIXI.Text(_DEBUG.fps.value, {
+
+		if (World.fps.show) {
+			World.fps.sprite = new PIXI.Text(World.fps.value, {
 				font: "bold 10px Arial",
 				fill: "white",
 				stroke: "black",
 				strokeThickness: 2
 			});
-			this.stage.addChild(this.fps);
+			this.stage.addChild(World.fps.sprite);
 		}
 	}
-	
-	
+
 	World.prototype.animate = function()
 	{
 		var self = this;
@@ -44,28 +41,12 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 		{
 			self.turn();
 			self.renderer.render(self.stage);
-
-			// Calculate FPS
-			if (_DEBUG.fps.show) {
-				if (!_DEBUG.fps.lastRender) {
-					_DEBUG.fps.lastRender = Date.now();
-					_DEBUG.fps.value = 0;
-				}
-
-				var delta = (new Date().getTime() - _DEBUG.fps.lastRender) / 1000;
-				_DEBUG.fps.lastRender = Date.now();
-				_DEBUG.fps.value = Math.round(1 / delta);
-
-				self.fps.setText("fps: " + _DEBUG.fps.value);
-				World.debugger.set("fps: " + _DEBUG.fps.value);
-			}
-
+			self.calculateFps();
+			World.animateCallback(self.elements);
 			requestAnimFrame(animate);
 		}
 		requestAnimFrame(animate);
 	};
-
-	
 
 	World.prototype.addElement = function(element, container)
 	{
@@ -104,7 +85,6 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 
 	};
 
-
 	World.prototype.removeDeadElements = function()
 	{
 		for (var i = 0; i < this.elements.length; i++) {
@@ -114,25 +94,39 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 			}
 		}
 	}
-	
+
 	World.prototype.turn = function()
 	{
 		this.removeDeadElements();
 		for (var i = 0; i < this.elements.length; i++) {
 			var element = this.elements[i];
 
-			if(element.proximityDetector.enabled) {
+			if (element.proximityDetector.enabled) {
 				element.detectElementsInRange(this.elements);
 			}
-			if(element.canCollideWithOthers) {
+			if (element.canCollideWithOthers) {
 				element.detectCollisions(this.elements);
 			}
-			
+
 			element.act();
 			element.drainEnergy();
 		}
-	}	
-	
+	}
+
+	World.prototype.calculateFps = function()
+	{
+		if(World.fps.show) {
+			if (!World.fps.lastRender) {
+				World.fps.lastRender = Date.now();
+				World.fps.value = 0;
+			}
+			var delta = (new Date().getTime() - World.fps.lastRender) / 1000;
+			World.fps.lastRender = Date.now();
+			World.fps.value = Math.round(1 / delta);
+			World.fps.sprite.setText("fps: " + World.fps.value);
+		}
+	}
+
 	return World;
-	
+
 })(elementFactory, actionFactory, elementSeeder, Vector2, PIXI, window);

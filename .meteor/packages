@@ -8,4 +8,7 @@ autopublish
 insecure
 fds:pixijs
 reactive-var
+jquery
+thepumpinglemma:chance
+ewall:foundation
 

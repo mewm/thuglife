@@ -17,3 +17,9 @@ Move.prototype.perform = function()
 	
 	return this.element.setPosition(newPosition);
 }
+
+
+Move.prototype.description = function()
+{
+	return 'Moving to ' + this.newPosition.x  + 'x' + this.newPosition.y;
+}
