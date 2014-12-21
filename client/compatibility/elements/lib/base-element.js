@@ -5,8 +5,6 @@ function BaseElement(id, startX, startY, sprite)
 	//Sprite
 	this.sprite = sprite;
 	this.sprite.position = new Vector2(startX, startY);
-	this.sprite.anchor.x = 0.5;
-	this.sprite.anchor.y = 0.5;
 	this.position = this.sprite.position;
 
 	//Element base stats/state
@@ -50,6 +48,7 @@ BaseElement.prototype.kill = function()
 BaseElement.prototype.queueAction = function(action)
 {
 	this.actionQueue.push(action);
+	this.actionLog.unshift(action);
 }
 
 BaseElement.prototype.queueActionFirst = function(action)
@@ -60,13 +59,14 @@ BaseElement.prototype.queueActionFirst = function(action)
 
 BaseElement.prototype.overrideCurrentAction = function(action)
 {
+	this.actionLog.unshift(action);
 	this.actionQueue[0] = action;
 }
 
 BaseElement.prototype.removeCompletedAction = function()
 {
 	var completedAction = this.actionQueue.splice(0, 1);
-	this.actionLog.unshift(completedAction[0]);
+	
 }
 
 BaseElement.prototype.getPosition = function()
@@ -76,12 +76,9 @@ BaseElement.prototype.getPosition = function()
 
 BaseElement.prototype.setPosition = function(position)
 {
-	position.x = Math.round(position.x);
-	position.y = Math.round(position.y);
+	position.x = position.x;
+	position.y = position.y;
 	this.sprite.position = position;
-	if(this.graphics) {
-		this.graphics.position = position;
-	}
 	this.position = position;
 }
 

@@ -6,8 +6,9 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 		value: 0,
 		sprite: {}
 	},
-	World.width = 800;
+		World.width = 800;
 	World.height = 600;
+	World.log = [];
 
 	World.animateCallback = function()
 	{
@@ -32,6 +33,8 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 			});
 			this.stage.addChild(World.fps.sprite);
 		}
+
+		this.paused = false;
 	}
 
 	World.prototype.animate = function()
@@ -39,18 +42,20 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 		var self = this;
 		var animate = function()
 		{
-			self.turn();
-			self.renderer.render(self.stage);
-			self.calculateFps();
-			World.animateCallback(self.elements);
-			requestAnimFrame(animate);
+			if (!self.paused) {
+				self.turn();
+				self.renderer.render(self.stage);
+				self.calculateFps();
+				World.animateCallback(self.elements);
+			}
 		}
-		requestAnimFrame(animate);
+
+		setInterval(animate, 100 / 10);
 	};
 
-	World.prototype.addElement = function(element, container)
+	World.prototype.addElement = function(element)
 	{
-		container.addChild(element.sprite);
+		this.stage.addChild(element.sprite);
 		this.elements.push(element);
 	};
 
@@ -60,13 +65,11 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 		for (var i = 0; i < this.elements.length; i++) {
 			var worldElement = this.elements[i];
 
-			if (worldElement.type == "bunny") {
-				if (worldElement.isAlreadyInRange(element)) {
-					worldElement.removeElementInRange(element);
-				}
-				if (worldElement.isAlreadyCollidingWith(element)) {
-					worldElement.removeCollidedElement(element);
-				}
+			if (worldElement.isAlreadyInRange(element)) {
+				worldElement.removeElementInRange(element);
+			}
+			if (worldElement.isAlreadyCollidingWith(element)) {
+				worldElement.removeCollidedElement(element);
 			}
 		}
 
@@ -115,7 +118,7 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 
 	World.prototype.calculateFps = function()
 	{
-		if(World.fps.show) {
+		if (World.fps.show) {
 			if (!World.fps.lastRender) {
 				World.fps.lastRender = Date.now();
 				World.fps.value = 0;

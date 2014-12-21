@@ -1,6 +1,6 @@
-Bunny.prototype = Object.create(ThugElement.prototype);
+Motherfucker.prototype = Object.create(ThugElement.prototype);
 
-function Bunny(id, x, y, sprite)
+function Motherfucker(id, x, y, sprite)
 {
 	ThugElement.apply(this, arguments);
 	this.speed = 1;
@@ -8,9 +8,9 @@ function Bunny(id, x, y, sprite)
 	this.display = true;
 }
 
-Bunny.constructor = Bunny;
+Motherfucker.constructor = Motherfucker;
 
-Bunny.prototype.performActions = function()
+Motherfucker.prototype.performActions = function()
 {
 	if (this.actionQueue.length > 0) {
 		var action = this.actionQueue[0];
@@ -20,7 +20,7 @@ Bunny.prototype.performActions = function()
 	return false;
 }
 
-Bunny.prototype.act = function()
+Motherfucker.prototype.act = function()
 {	
 	// Fire current action in actionQueue.
 	if(this.performActions()){
@@ -36,13 +36,13 @@ Bunny.prototype.act = function()
 	
 }
 
-Bunny.prototype.goLookForFood = function()
+Motherfucker.prototype.goLookForFood = function()
 {
 	var action = actionFactory.createHarvest.call(this);
 	this.queueAction(action);
 };
 
-Bunny.prototype.walkRandom = function(overrideCurrentAction)
+Motherfucker.prototype.walkRandom = function(overrideCurrentAction)
 {
 	var r1 = Math.random() * World.width;
 	var r2 = Math.random() * World.height;
@@ -54,3 +54,5 @@ Bunny.prototype.walkRandom = function(overrideCurrentAction)
 	
 	return this.queueAction(moveAction);
 }
+
+
