@@ -19,6 +19,17 @@ Template.World.rendered = function()
 	
 };
 
+Template.World.events({
+	'click button[name="pause"]': function(event, template) {
+		console.log("Simulation paused");
+		template.world.paused = true;
+	},
+	'click button[name="play"]': function(event, template) {
+		console.log("Simulation resumed");
+		template.world.paused = false;
+	}
+});
+
 Template.World.helpers({
 	fps: function()
 	{

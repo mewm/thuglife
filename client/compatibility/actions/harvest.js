@@ -15,10 +15,13 @@ Harvest.prototype.perform = function()
 	
 		var eat = actionFactory.createEat.call(this.element, closestFood);
 		this.element.queueAction(eat);
-
-	}  else {
+	} else {
 		this.element.walkRandom(true);
 	}
-	
+}
+
+Harvest.prototype.description = function() 
+{
+	return 'Harvesting!';
 }
 

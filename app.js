@@ -6,9 +6,5 @@ if (Meteor.isServer) {
 
 if (Meteor.isClient) {
 	Meteor.startup(function () {
-		Tracker.autorun(function () {
-			var text = Session.get('foo');
-			console.log('Foo', text);
-		});
 	});
 }

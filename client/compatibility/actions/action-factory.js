@@ -10,5 +10,5 @@ var actionFactory = {
 	createEat: function(edibleElement)
 	{
 		return new Eat(edibleElement, this);
-	},
+	}
 };

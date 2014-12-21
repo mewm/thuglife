@@ -1,5 +1,5 @@
 <head>
-  <title>Thuglife</title>
+	<title>Thuglife</title>
 </head>
 
 <body>
@@ -8,7 +8,11 @@
 
 <template name="World">
 	<div class="row full large-collapse">
-		<div class="large-5 columns"><div id="canvas"></div></div>
+		<div class="large-5 columns">
+			<div id="canvas"></div>
+			<button name="pause">PAUSE</button>
+			<button name="play">PLAY</button>
+		</div>
 		<div class="large-7 columns">
 			<!--FPS: <span id="fps">{{fps}}</span>-->
 			<div id="thugs">{{> ThugDisplays thugs=thugs }}</div>
@@ -29,14 +33,42 @@
 <template name="ThugDisplay">
 	<h5>Name: {{name}}</h5>
 	Energy: {{ energy}}<br><br>
-	<div class="actionQueue">
-	<strong>Action priority:</strong><br>
-	{{#each actionQueue}}
-		{{description}}	<br>
-	{{/each}}
+
+	<div class="row">
+		<div class="large-4 columns">
+			<div class="actionQueue">
+				<strong>Action priority:</strong><br>
+				{{#each actionQueue}}
+					{{description}}    <br>
+				{{/each}}
+			</div>
+		</div>
+		<div class="large-4 columns">
+			<div class="elementsInRange">
+				<strong>Elements in range {{elementsInRange.length}}: </strong><br>
+				{{#each elementsInRange}}
+					{{ type}}    <br>
+				{{/each}}
+			</div>
+		</div>
+		<div class="large-4 columns">
+			<div class="collidingWith">
+				<strong>Colliding with {{collidedElements.length}}: </strong><br>
+				{{#each collidedElements}}
+					{{#if name}}
+						{{name}}
+					{{else}}
+						{{type}}
+					{{/if}}
+					<br>
+				{{/each}}
+			</div>
+		</div>
+		
 	</div>
 	<br><br>
 	<strong>Action log:</strong>
+
 	<div class="actionLog">
 		{{#each actionLog}}
 			{{description}}<br>
