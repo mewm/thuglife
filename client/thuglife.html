@@ -1,5 +1,5 @@
 <head>
-  <title>thuglife</title>
+  <title>Thuglife</title>
 </head>
 
 <body>
@@ -7,5 +7,39 @@
 </body>
 
 <template name="World">
-	<div id="debug">{{debug}}</div>
+	<div class="row full large-collapse">
+		<div class="large-5 columns"><div id="canvas"></div></div>
+		<div class="large-7 columns">
+			<!--FPS: <span id="fps">{{fps}}</span>-->
+			<div id="thugs">{{> ThugDisplays thugs=thugs }}</div>
+		</div>
+	</div>
+</template>
+
+
+<template name="ThugDisplays">
+	{{#each thugs}}
+		{{#if display}}
+			{{> ThugDisplay }}
+			<hr>
+		{{/if}}
+	{{/each}}
+</template>
+
+<template name="ThugDisplay">
+	<h5>Name: {{name}}</h5>
+	Energy: {{ energy}}<br><br>
+	<div class="actionQueue">
+	<strong>Action priority:</strong><br>
+	{{#each actionQueue}}
+		{{description}}	<br>
+	{{/each}}
+	</div>
+	<br><br>
+	<strong>Action log:</strong>
+	<div class="actionLog">
+		{{#each actionLog}}
+			{{description}}<br>
+		{{/each}}
+	</div>
 </template>

@@ -10,6 +10,8 @@ function BaseElement(id, startX, startY, sprite)
 	this.position = this.sprite.position;
 
 	//Element base stats/state
+	this.name = null;
+	this.display = false;
 	this.speed = 1;
 	this.maxEnergy = 100;
 	this.energy = 100;
@@ -29,6 +31,7 @@ function BaseElement(id, startX, startY, sprite)
 	};
 
 	this.actionQueue = [];
+	this.actionLog = [];
 }
 
 BaseElement.prototype.drainEnergy = function()
@@ -62,7 +65,8 @@ BaseElement.prototype.overrideCurrentAction = function(action)
 
 BaseElement.prototype.removeCompletedAction = function()
 {
-	this.actionQueue.splice(0, 1);
+	var completedAction = this.actionQueue.splice(0, 1);
+	this.actionLog.unshift(completedAction[0]);
 }
 
 BaseElement.prototype.getPosition = function()

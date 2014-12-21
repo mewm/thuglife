@@ -1,8 +1,14 @@
-html. body {
-	font-family: "Courier New";
+html, body {
+	font-weight: 200;
+	font-size: 10px;
 }
 .mood-good {
 	color: green;
+}
+
+.full {
+	width: 100% !important;
+	max-width: 100% !important;
 }
 
 .mood-bad {
@@ -11,4 +17,20 @@ html. body {
 
 .mood-bold {
 	font-weight: bold;
+}
+
+#canvas {
+	
+}
+
+.actionLog {
+	max-height: 60px;
+	height: 60px;
+	overflow-y: scroll;
+}
+
+.actionQueue {
+	max-height: 60px;
+	height: 60px;
+	overflow-y: scroll;
 }

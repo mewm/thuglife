@@ -5,10 +5,10 @@ function Bunny(id, x, y, sprite)
 	ThugElement.apply(this, arguments);
 	this.speed = 1;
 	this.type = 'bunny';
+	this.display = true;
 }
 
 Bunny.constructor = Bunny;
-
 
 
 Bunny.prototype.performActions = function()
@@ -37,8 +37,6 @@ Bunny.prototype.act = function()
 	
 }
 
-
-
 Bunny.prototype.goLookForFood = function()
 {
 	var action = actionFactory.createHarvest.call(this);
@@ -47,8 +45,8 @@ Bunny.prototype.goLookForFood = function()
 
 Bunny.prototype.walkRandom = function(overrideCurrentAction)
 {
-	var r1 = Math.random() * 500;
-	var r2 = Math.random() * 500;
+	var r1 = Math.random() * World.width;
+	var r2 = Math.random() * World.height;
 	var moveAction = actionFactory.createWalk.call(this, new Vector2(r1,r2));
 	
 	if(overrideCurrentAction) {

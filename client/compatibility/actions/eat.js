@@ -17,3 +17,7 @@ Eat.prototype.perform = function()
 	this.element.walkRandom(true);	
 	
 }
+
+Eat.prototype.description = function() {
+	return 'Eaiting ' + this.edibleElement.type;
+}

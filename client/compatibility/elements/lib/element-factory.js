@@ -1,4 +1,5 @@
 var elementFactory = {
+	chance: new Chance(),
 	textures: {
 		bunny: PIXI.Texture.fromImage("bunny.png"),
 		shroom: PIXI.Texture.fromImage("shroom.png")
@@ -7,6 +8,7 @@ var elementFactory = {
 	{
 		var element = new PIXI.Sprite(this.textures.bunny);
 		var bunny = new Bunny(1, x, y, element);
+		bunny.name = this.chance.first();
 		return bunny;
 	},
 	createShroom: function(x, y)
