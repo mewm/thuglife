@@ -160,7 +160,6 @@ BaseElement.prototype.isAlreadyInRange = function(element)
 	return true;
 }
 
-
 BaseElement.prototype.isInRange = function(worldElement)
 {
 	return this.position.distanceTo(worldElement.position) <= this.proximityDetector.radius;

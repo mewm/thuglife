@@ -57,5 +57,3 @@ Bunny.prototype.walkRandom = function(overrideCurrentAction)
 	
 	return this.queueAction(moveAction);
 }
-
-
