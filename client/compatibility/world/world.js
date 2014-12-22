@@ -6,7 +6,7 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 		value: 0,
 		sprite: {}
 	},
-		World.width = 800;
+	World.width = 800;
 	World.height = 600;
 	World.log = [];
 

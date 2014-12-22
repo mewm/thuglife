@@ -8,8 +8,6 @@ function ThugElement(id, startX, startY, sprite)
 	this.speed = 1;
 	this.energy = 100;
 	this.isAlive = true;
-
-
 }
 
 ThugElement.constructor = ThugElement;
