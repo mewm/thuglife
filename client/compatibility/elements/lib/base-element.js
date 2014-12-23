@@ -14,7 +14,7 @@ function BaseElement(id, startX, startY, sprite)
 	this.maxEnergy = 100;
 	this.energy = 100;
 	this.isAlive = true;
-	this.energyDrainPerTick = 0.05;
+	this.energyDrainPerTick = 0.1;
 
 	//Collections
 	this.elementsInRange = [];
@@ -30,7 +30,8 @@ function BaseElement(id, startX, startY, sprite)
 
 	this.actionQueue = [];
 	this.actionLog = [];
-}
+	
+};
 
 BaseElement.prototype.drainEnergy = function()
 {
@@ -66,7 +67,6 @@ BaseElement.prototype.overrideCurrentAction = function(action)
 BaseElement.prototype.removeCompletedAction = function()
 {
 	var completedAction = this.actionQueue.splice(0, 1);
-	
 }
 
 BaseElement.prototype.getPosition = function()
@@ -84,32 +84,21 @@ BaseElement.prototype.setPosition = function(position)
 
 BaseElement.prototype.detectCollisions = function(worldElements)
 {
+	this.collidedElements = [];
 	for (var i = 0; i < worldElements.length; i++) {
 		var worldElement = worldElements[i];
 		if (worldElement != this) {
 
 			// True if there is a collision.
-			if (this.isCollidingWith(worldElement) && !this.isAlreadyCollidingWith(worldElement)) {
+			if (this.isCollidingWith(worldElement)) {
 				this.addCollidedElement(worldElement);
-			} else if (!this.isCollidingWith(worldElement) && this.isAlreadyCollidingWith(worldElement)) {
-				this.removeCollidedElement(worldElement);
 			}
 		}
 	}
 };
 
-BaseElement.prototype.isAlreadyCollidingWith = function(element)
-{
-	if (this.collidedElements.indexOf(element) != -1) {
-		return true;
-	}
-
-	return false;
-}
-
 BaseElement.prototype.isCollidingWith = function(element)
 {
-
 	// Just to make the statement below look a little less fucked.
 	var selfPos = {
 		left: this.position.x - (this.sprite.width/2),
@@ -123,7 +112,7 @@ BaseElement.prototype.isCollidingWith = function(element)
 		right: element.position.x + (element.sprite.width/2),
 		bottom: element.position.y + (element.sprite.height/2)
 	};
-
+	
 	return !(elementPos.left > selfPos.right || elementPos.right < selfPos.left || elementPos.top > selfPos.bottom || elementPos.bottom < selfPos.top);
 }
 
@@ -132,33 +121,18 @@ BaseElement.prototype.addCollidedElement = function(element)
 	this.collidedElements.push(element);
 }
 
-BaseElement.prototype.removeCollidedElement = function(element)
-{
-	this.collidedElements.splice(this.collidedElements.indexOf(element), 1);
-}
 
 BaseElement.prototype.detectElementsInRange = function(worldElements)
 {
+	this.elementsInRange = [];
 	for (var i = 0; i < worldElements.length; i++) {
 		var worldElement = worldElements[i];
 		if (worldElement != this) {
-			if (this.isInRange(worldElement) && !this.isAlreadyInRange(worldElement)) {
+			if (this.isInRange(worldElement)) {
 				this.addElementInRange(worldElement);
-			} else if(!this.isInRange(worldElement) && this.isAlreadyInRange(worldElement)) {
-				if (this.isAlreadyInRange(worldElement)) {
-					this.removeElementInRange(worldElement);
-				}
 			}
 		}
 	}
-}
-
-BaseElement.prototype.isAlreadyInRange = function(element)
-{
-	if (this.elementsInRange.indexOf(element) == -1) {
-		return false;
-	}
-	return true;
 }
 
 
@@ -172,10 +146,6 @@ BaseElement.prototype.addElementInRange = function(element)
 	this.elementsInRange.push(element);
 }
 
-BaseElement.prototype.removeElementInRange = function(element)
-{
-	this.elementsInRange.splice(this.elementsInRange.indexOf(element), 1);
-}
 
 BaseElement.prototype.getClosestElementOfTypeInRange = function(type)
 {

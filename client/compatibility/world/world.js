@@ -61,7 +61,7 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 	{
 		this.stage = new PIXI.Stage(0x66FF99);
 		this.renderer = new PIXI.WebGLRenderer(World.width, World.height);//autoDetectRenderer(400, 300);
-		this.canvasNode('canvas').appendChild(this.renderer.view);
+		this.canvasNode.appendChild(this.renderer.view);
 	};
 
 	/**
@@ -71,7 +71,7 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 	{
 		var animate = function()
 		{
-			if (!self.paused) {
+			if (!this.paused) {
 				this.turn();
 				this.renderer.render(this.stage);
 				this.calculateFps();
@@ -101,18 +101,6 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 	 */
 	World.prototype.removeElement = function(element)
 	{
-		// Remove element from all players.
-		for (var i = 0; i < this.elements.length; i++) {
-			var worldElement = this.elements[i];
-
-			if (worldElement.isAlreadyInRange(element)) {
-				worldElement.removeElementInRange(element);
-			}
-			if (worldElement.isAlreadyCollidingWith(element)) {
-				worldElement.removeCollidedElement(element);
-			}
-		}
-
 		// Remove elements sprite from spriteBatch.
 		var search = element.sprite.parent.children.indexOf(element.sprite);
 		if (search !== -1) {
