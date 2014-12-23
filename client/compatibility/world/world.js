@@ -5,25 +5,42 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 		lastTick: null,
 		value: 0,
 		sprite: {}
-	},
-		World.width = 800;
-	World.height = 600;
-	World.log = [];
+	};
+		
+	//This log can be added with a message and time object to be shown under the world map
+	World.debugLog = [];
+	World.log = function(messageObject) 
+	{
+		World.debugLog.push(messageObject);	
+	};
 
+	//World dimensions. Is used for various
+	World.width = 700;
+	World.height = 600;
+
+	/**
+	 * This method will be invoked every world tick
+	 */
 	World.animateCallback = function()
 	{
 	};
 
+
+	/**
+	 * Setup da world
+	 *
+	 * @constructor
+	 */
 	function World()
 	{
-		this.stage = new PIXI.Stage(0x66FF99);
-		this.renderer = new PIXI.WebGLRenderer(World.width, World.height);//autoDetectRenderer(400, 300);
-		document.getElementById('canvas').appendChild(this.renderer.view);
-
+		this.canvasNode = document.getElementById('canvas');
 		this.elements = [];
+		this.paused = false;
+		this.renderStageToDom();
+		
 		elementSeeder.seedAll.call(this);
-		this.animate();
 
+		//Add FPS to stage
 		if (World.fps.show) {
 			World.fps.sprite = new PIXI.Text(World.fps.value, {
 				font: "bold 10px Arial",
@@ -34,31 +51,54 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 			this.stage.addChild(World.fps.sprite);
 		}
 
-		this.paused = false;
+		this.animate();
 	}
 
+	/**
+	 * Initates stage and renderer and adds it to the dom 
+	 */
+	World.prototype.renderStageToDom = function()
+	{
+		this.stage = new PIXI.Stage(0x66FF99);
+		this.renderer = new PIXI.WebGLRenderer(World.width, World.height);//autoDetectRenderer(400, 300);
+		this.canvasNode('canvas').appendChild(this.renderer.view);
+	};
+
+	/**
+	 * Starts the animation and continously renders the stage.
+	 */
 	World.prototype.animate = function()
 	{
-		var self = this;
 		var animate = function()
 		{
 			if (!self.paused) {
-				self.turn();
-				self.renderer.render(self.stage);
-				self.calculateFps();
-				World.animateCallback(self.elements);
+				this.turn();
+				this.renderer.render(this.stage);
+				this.calculateFps();
+				World.animateCallback();
 			}
-		}
+		}.bind(this);
 
 		setInterval(animate, 100 / 10);
 	};
 
+	/**
+	 * Adds an element to the world
+	 * 
+	 * @param BaseElement
+	 */
 	World.prototype.addElement = function(element)
 	{
 		this.stage.addChild(element.sprite);
 		this.elements.push(element);
 	};
 
+	/**
+	 * Removes an element from the world completely.
+	 * Also traverses all collissions and in-range elements for the element to remove it/
+	 * 
+	 * @param BaseElement
+	 */
 	World.prototype.removeElement = function(element)
 	{
 		// Remove element from all players.
@@ -85,9 +125,11 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 		if (search !== -1) {
 			this.elements.splice(search, 1);
 		}
-
 	};
 
+	/**
+	 * Traverses through all elements and removes the dead ones
+	 */
 	World.prototype.removeDeadElements = function()
 	{
 		for (var i = 0; i < this.elements.length; i++) {
@@ -98,6 +140,10 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 		}
 	}
 
+	/**
+	 * This method gets invoked each "tick" the turn has.
+	 * Everything that should be (re)computed each turn should go in here.
+	 */
 	World.prototype.turn = function()
 	{
 		this.removeDeadElements();
@@ -116,6 +162,9 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 		}
 	}
 
+	/**
+	 * Calculate and update current FPS
+	 */
 	World.prototype.calculateFps = function()
 	{
 		if (World.fps.show) {

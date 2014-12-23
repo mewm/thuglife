@@ -18,6 +18,14 @@
 			<div id="thugs">{{> ThugDisplays thugs=thugs }}</div>
 		</div>
 	</div>
+	<div class="row full large-collapse">
+		<div class="large-12">
+			<h5>Debug log</h5>
+			{{#each debugLog}}
+				{{message}}				
+			{{/each}}
+		</div>
+	</div>
 </template>
 
 
@@ -64,7 +72,7 @@
 				{{/each}}
 			</div>
 		</div>
-		
+
 	</div>
 	<br><br>
 	<strong>Action log:</strong>

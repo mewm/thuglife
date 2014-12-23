@@ -1,19 +1,19 @@
 Template.World.created = function()
 {
-	this.debugger = new ReactiveVar('debugInfo');
+	this.debugLog = new ReactiveVar([]);
 	this.reactiveElements = new ReactiveVar([]);
-	World.debugger = this.debugger;
 
 };
 
 Template.World.rendered = function()
 {
-	
 	this.world = new World();
 	this.reactiveElements.set(this.world.elements);
-	World.animateCallback = function(elements)
+	this.debugLog.set(World.debugLog);
+	World.animateCallback = function()
 	{
-		this.reactiveElements.set(elements);
+		this.reactiveElements.set(this.world.elements);
+		this.debugLog.set(World.debugLog);
 	}.bind(this);
 	
 	
@@ -31,9 +31,13 @@ Template.World.events({
 });
 
 Template.World.helpers({
+	debugLog: function() {
+		return Template.instance().debugLog.get();	
+	},
+	
 	fps: function()
-	{
-		return Template.instance().debugger.get();
+	{ 
+		return Template.instance().fps.get();
 	},
 	thugs: function()
 	{
