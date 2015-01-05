@@ -101,16 +101,16 @@ BaseElement.prototype.isCollidingWith = function(element)
 {
 	// Just to make the statement below look a little less fucked.
 	var selfPos = {
-		left: this.position.x - (this.sprite.width/2),
-		top: this.position.y - (this.sprite.height/2),
-		right: this.position.x + (this.sprite.width/2),
-		bottom: this.position.y + (this.sprite.height/2)
+		left: this.position.x - (this.thugsprite.width/2),
+		top: this.position.y - (this.thugsprite.height/2),
+		right: this.position.x + (this.thugsprite.width/2),
+		bottom: this.position.y + (this.thugsprite.height/2)
 	};
 	var elementPos = {
-		left: element.position.x - (element.sprite.width/2),
-		top: element.position.y - (element.sprite.height/2),
-		right: element.position.x + (element.sprite.width/2),
-		bottom: element.position.y + (element.sprite.height/2)
+		left: element.position.x - (element.thugsprite.width/2),
+		top: element.position.y - (element.thugsprite.height/2),
+		right: element.position.x + (element.thugsprite.width/2),
+		bottom: element.position.y + (element.thugsprite.height/2)
 	};
 	
 	return !(elementPos.left > selfPos.right || elementPos.right < selfPos.left || elementPos.top > selfPos.bottom || elementPos.bottom < selfPos.top);

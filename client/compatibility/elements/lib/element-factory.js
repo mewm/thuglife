@@ -13,7 +13,7 @@ var elementFactory = {
 		sprite.anchor.y = 0.5;
 		var bunny = new Bunny(1, x, y, spritecontainer);
 		bunny.name = this.chance.first();
-
+		bunny.thugsprite = sprite;		
 		var graphics = new PIXI.Graphics();
 
 		// Proximity Radius.
@@ -86,6 +86,7 @@ var elementFactory = {
 	{
 		var sprite = new PIXI.Sprite(this.textures.shroom);
 		var shroom = new Shroom(2, x, y, sprite);
+		shroom.thugsprite = sprite;
 		return shroom;
 	}
 };

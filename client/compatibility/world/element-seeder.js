@@ -3,7 +3,7 @@ var elementSeeder = (function()
 	return {
 		seedAll: function()
 		{
-			var shroomsNo = 2;
+			var shroomsNo = 10;
 			for (var i = 0; i < shroomsNo; i++) {
 				// Create a new critter in the center of the map with some random offset.
 				var element = elementFactory.createShroom(Math.random() * World.width, Math.random() * World.height);
