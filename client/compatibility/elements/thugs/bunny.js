@@ -22,7 +22,6 @@ Bunny.prototype.performActions = function()
 
 Bunny.prototype.act = function()
 {	
-	console.log(this.actionQueue);
 	// Fire current action in actionQueue.
 	if(this.performActions()){
 		return true;
