@@ -87,7 +87,7 @@ BaseElement.prototype.detectCollisions = function(worldElements)
 	this.collidedElements = [];
 	for (var i = 0; i < worldElements.length; i++) {
 		var worldElement = worldElements[i];
-		if (worldElement != this) {
+		if (worldElement != this && this.isInRange(worldElement)) {
 
 			// True if there is a collision.
 			if (this.isCollidingWith(worldElement)) {

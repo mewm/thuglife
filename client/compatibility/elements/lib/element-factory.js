@@ -27,7 +27,7 @@ var elementFactory = {
 		graphics.drawRect(-(26/2), -(47/2), 26, 47);
 		graphics.endFill();
 
-		//Name tag
+		// Name tag
 		var name = new PIXI.Text(bunny.name, {
 			font: "bold 12px Arial",
 			fill: "white",

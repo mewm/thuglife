@@ -25,7 +25,6 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 	{
 	};
 
-
 	/**
 	 * Setup da world
 	 *
