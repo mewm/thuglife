@@ -4,11 +4,10 @@ function Harvest(element)
 	this.element = element;	
 }
 
-
 Harvest.prototype.perform = function()
 {
 	var closestFood = this.element.getClosestElementOfTypeInRange('shroom');
-	
+
 	if(closestFood) {
 		var move = actionFactory.createWalk.call(this.element, closestFood.position);
 		this.element.overrideCurrentAction(move);
@@ -24,4 +23,3 @@ Harvest.prototype.description = function()
 {
 	return 'Harvesting!';
 }
-

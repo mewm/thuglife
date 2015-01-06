@@ -30,7 +30,8 @@ function BaseElement(id, startX, startY, sprite)
 
 	this.actionQueue = [];
 	this.actionLog = [];
-	
+
+	this.target = null;
 };
 
 BaseElement.prototype.drainEnergy = function()
@@ -56,7 +57,6 @@ BaseElement.prototype.queueActionFirst = function(action)
 {
 	this.actionQueue.unshift(action);
 }
-
 
 BaseElement.prototype.overrideCurrentAction = function(action)
 {
@@ -99,7 +99,6 @@ BaseElement.prototype.detectCollisions = function(worldElements)
 
 BaseElement.prototype.isCollidingWith = function(element)
 {
-	// Just to make the statement below look a little less fucked.
 	var selfPos = {
 		left: this.position.x - (this.thugsprite.width/2),
 		top: this.position.y - (this.thugsprite.height/2),
@@ -121,7 +120,6 @@ BaseElement.prototype.addCollidedElement = function(element)
 	this.collidedElements.push(element);
 }
 
-
 BaseElement.prototype.detectElementsInRange = function(worldElements)
 {
 	this.elementsInRange = [];
@@ -135,7 +133,6 @@ BaseElement.prototype.detectElementsInRange = function(worldElements)
 	}
 }
 
-
 BaseElement.prototype.isInRange = function(worldElement)
 {
 	return this.position.distanceTo(worldElement.position) <= this.proximityDetector.radius;
@@ -145,7 +142,6 @@ BaseElement.prototype.addElementInRange = function(element)
 {
 	this.elementsInRange.push(element);
 }
-
 
 BaseElement.prototype.getClosestElementOfTypeInRange = function(type)
 {
@@ -200,4 +196,14 @@ BaseElement.prototype.setEnergy = function(energy) {
 
 BaseElement.prototype.getEnergy = function() {
 	return this.energy;
+}
+
+BaseElement.prototype.walkRandom = function(overrideCurrentAction) {
+	var moveAction = actionFactory.createRandomWalk.call(this);
+	
+	if(overrideCurrentAction) {
+		return this.overrideCurrentAction(moveAction);
+	}
+	
+	return this.queueAction(moveAction);
 }

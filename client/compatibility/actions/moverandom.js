@@ -1,11 +1,9 @@
-function Move(newPosition, element)
-{
-	this.newPosition = newPosition;
+function MoveRandom(element) {
+	this.newPosition = new Vector2(Math.random() * 700, Math.random() * 600);
 	this.element = element;
 }
 
-Move.prototype.perform = function()
-{
+MoveRandom.prototype.perform = function() {
 	// Reached destination. Remove action.
 	if (Math.floor(this.element.getPosition().distanceTo(this.newPosition)) <= 1) {
 		this.element.removeCompletedAction();
@@ -18,7 +16,6 @@ Move.prototype.perform = function()
 	return this.element.setPosition(newPosition);
 }
 
-Move.prototype.description = function()
-{
-	return 'Moving to ' + this.newPosition.x  + ',' + this.newPosition.y;
+MoveRandom.prototype.description = function() {
+	return "Moving random to " + this.newPosition.x + "," + this.newPosition.y;
 }

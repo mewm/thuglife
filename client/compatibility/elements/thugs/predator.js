@@ -1,6 +1,6 @@
-Bunny.prototype = Object.create(ThugElement.prototype);
+Predator.prototype = Object.create(ThugElement.prototype);
 
-function Bunny(id, x, y, sprite)
+function Predator(id, x, y, sprite)
 {
 	ThugElement.apply(this, arguments);
 	this.speed = 1;
@@ -8,9 +8,9 @@ function Bunny(id, x, y, sprite)
 	this.display = true;
 }
 
-Bunny.constructor = Bunny;
+Predator.constructor = Predator;
 
-Bunny.prototype.performActions = function()
+Predator.prototype.performActions = function()
 {
 	if (this.actionQueue.length > 0) {
 		var action = this.actionQueue[0];
@@ -20,7 +20,7 @@ Bunny.prototype.performActions = function()
 	return false;
 }
 
-Bunny.prototype.act = function()
+Predator.prototype.act = function()
 {	
 	// Fire current action in actionQueue.
 	if(this.performActions()){
@@ -33,10 +33,9 @@ Bunny.prototype.act = function()
 	} else {
 		this.walkRandom();
 	}
-	
 }
 
-Bunny.prototype.goLookForFood = function()
+Predator.prototype.goLookForFood = function()
 {
 	var action = actionFactory.createHarvest.call(this);
 	this.queueAction(action);
