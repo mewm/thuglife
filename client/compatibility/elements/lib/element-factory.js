@@ -15,7 +15,7 @@ var elementFactory = {
 		sprite.anchor.y = 0.5;
 		var bunny = new Bunny(1, x, y, spritecontainer);
 		bunny.name = this.chance.first();
-		bunny.thugsprite = sprite;		
+		bunny.thugsprite = sprite;
 		var graphics = new PIXI.Graphics();
 
 		// Proximity Radius.
@@ -27,6 +27,8 @@ var elementFactory = {
 
 		// Collision Box.
 		graphics.beginFill(0xFF0000, 0.5);
+
+		// Need AssetLoader to get the width and height of the spirte here for some reason. element.sprite.width/height will return 1 here.
 		graphics.drawRect(-(sprite.width/2), -(sprite.height/2), sprite.width, sprite.height);
 		graphics.endFill();
 
@@ -55,7 +57,7 @@ var elementFactory = {
 		sprite.anchor.y = 0.5;
 		var predator = new Predator(1, x, y, spritecontainer);
 		predator.name = this.chance.first();
-		predator.thugsprite = sprite;	
+		predator.thugsprite = sprite;
 
 		var graphics = new PIXI.Graphics();
 
