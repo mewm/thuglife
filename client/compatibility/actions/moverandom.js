@@ -1,5 +1,5 @@
 function MoveRandom(element) {
-	this.newPosition = new Vector2(Math.random() * 700, Math.random() * 600);
+	this.newPosition = new Vector2(Math.random() * window.innerWidth - 50, Math.random() * window.innerHeight - 100);
 	this.element = element;
 }
 

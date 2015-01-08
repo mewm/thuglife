@@ -1,20 +1,36 @@
 <head>
 	<title>Thuglife</title>
+
+	<link href='http://fonts.googleapis.com/css?family=Passion+One:900' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
 {{> World }}
 </body>
 
+
+
+
+
 <template name="World">
-	<div class="row full large-collapse">
+
+	<a href="https://github.com/mewm/thuglife"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"></a>
+
+	<header>
+		<img src="bunny-ultra-thug.png" alt="thug"/>
+		thuglife
+	</header>
+
+	<div id="canvas"></div>
+
+	<!--<div class="row full large-collapse">
 		<div class="large-5 columns">
 			<div id="canvas"></div>
 			<button name="pause">PAUSE</button>
 			<button name="play">PLAY</button>
 		</div>
 		<div class="large-7 columns">
-			<!--FPS: <span id="fps">{{fps}}</span>-->
+			FPS: <span id="fps">{{fps}}</span>
 			<div id="thugs">{{> ThugDisplays thugs=thugs }}</div>
 		</div>
 	</div>
@@ -25,20 +41,29 @@
 				{{message}}				
 			{{/each}}
 		</div>
-	</div>
+	</div>-->
 </template>
 
 
+
+
+
+
+
+
 <template name="ThugDisplays">
+	<!--
 	{{#each thugs}}
 		{{#if display}}
 			{{> ThugDisplay }}
 			<hr>
 		{{/if}}
 	{{/each}}
+	-->
 </template>
 
 <template name="ThugDisplay">
+	<!--
 	<h5>Name: {{name}}</h5>
 	Energy: {{ energy}}<br><br>
 
@@ -82,4 +107,5 @@
 			{{description}}<br>
 		{{/each}}
 	</div>
+	-->
 </template>

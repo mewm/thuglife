@@ -14,7 +14,6 @@ Eat.prototype.perform = function()
 	}
 	
 	this.element.removeCompletedAction();	
-	
 }
 
 Eat.prototype.description = function() {

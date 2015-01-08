@@ -10,14 +10,13 @@ var elementSeeder = (function()
 				this.addElement(element);
 			}
 
-			var bunnies = 5;
+			var bunnies = 10;
 			for (var i = 0; i < bunnies; i++) {
-				// Create a new critter in the center of the map with some random offset.
 				var element = elementFactory.createBunny(Math.random() * World.width, Math.random() * World.height);
 				this.addElement(element);
 			}
 
-			var predators = 5;
+			var predators = 0;
 			for (var i = 0; i < predators; i++) {
 				var element = elementFactory.createPredator(Math.random() * World.width, Math.random() * World.height);
 				this.addElement(element);

@@ -14,7 +14,7 @@ function BaseElement(id, startX, startY, sprite)
 	this.maxEnergy = 100;
 	this.energy = 100;
 	this.isAlive = true;
-	this.energyDrainPerTick = 0.1;
+	this.energyDrainPerTick = 0.01; // This is a default drain on all elements simply for being alive. Life sucks!
 
 	//Collections
 	this.elementsInRange = [];
@@ -25,7 +25,8 @@ function BaseElement(id, startX, startY, sprite)
 	this.canBeCollidedWith = false;
 	this.proximityDetector = {
 		enabled: true,
-		radius: 200
+		radius: 200,
+		visible: false
 	};
 
 	this.actionQueue = [];

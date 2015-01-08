@@ -14,9 +14,7 @@ Template.World.rendered = function()
 	{
 		this.reactiveElements.set(this.world.elements);
 		this.debugLog.set(World.debugLog);
-	}.bind(this);
-	
-	
+	}.bind(this);	
 };
 
 Template.World.events({

@@ -15,8 +15,8 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 	};
 
 	//World dimensions. Is used for various
-	World.width = 700;
-	World.height = 600;
+	World.width = window.innerWidth - 50;
+	World.height = window.innerHeight - 100;
 
 	/**
 	 * This method will be invoked every world tick
@@ -58,9 +58,15 @@ var World = (function(elementFactory, actionFactory, elementSeeder, Vector2, PIX
 	 */
 	World.prototype.renderStageToDom = function()
 	{
-		this.stage = new PIXI.Stage(0x66FF99);
+		this.stage = new PIXI.Stage(0x179E24);
 		this.renderer = new PIXI.WebGLRenderer(World.width, World.height);//autoDetectRenderer(400, 300);
 		this.canvasNode.appendChild(this.renderer.view);
+		var world = this;
+		$(window).resize(function() {
+			world.width = window.innerWidth - 50;
+			world.height = window.innerHeight - 100;
+			world.renderer.resize(world.width, world.height);
+		});
 	};
 
 	/**

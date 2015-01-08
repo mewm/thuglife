@@ -5,6 +5,7 @@ var actionFactory = {
 	},
 	createRandomWalk: function() 
 	{
+		// I guess we could just use Move(newVector, this) here as well, but I'll just make a new func in case they differ in the future.
 		return new MoveRandom(this);
 	},
 	createHarvest: function()

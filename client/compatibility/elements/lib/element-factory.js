@@ -19,9 +19,11 @@ var elementFactory = {
 		var graphics = new PIXI.Graphics();
 
 		// Proximity Radius.
-		graphics.beginFill(0x000000, 0.25);
-		graphics.drawCircle(0,0,200);
-		graphics.endFill();
+		if(bunny.proximityDetector.visible) {
+			graphics.beginFill(0x000000, 0.25);
+			graphics.drawCircle(0,0,200);
+			graphics.endFill();
+		}
 
 		// Collision Box.
 		graphics.beginFill(0xFF0000, 0.5);
@@ -58,9 +60,11 @@ var elementFactory = {
 		var graphics = new PIXI.Graphics();
 
 		// Proximity Radius.
-		graphics.beginFill(0x000000, 0.25);
-		graphics.drawCircle(0,0,200);
-		graphics.endFill();
+		if(predator.proximityDetector.visible) {
+			graphics.beginFill(0x000000, 0.25);
+			graphics.drawCircle(0,0,200);
+			graphics.endFill();
+		}
 
 		// Collision Box.
 		graphics.beginFill(0xFF0000, 0.5);
